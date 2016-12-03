@@ -1,6 +1,9 @@
 package zakemi.solteq.Assignment.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
@@ -16,10 +19,9 @@ public class Employee {
 	private String phone;
 	private String email;
 	private Date joinDate;
-	//private Salary salary;
+	private List<SalaryUnit> salary;
 	
 	public Employee(){
-		
 	}
 
 	public Employee(String firstName, String lastName, String address, String phone, String email, Date joinDate) {
@@ -29,10 +31,8 @@ public class Employee {
 		this.phone = phone;
 		this.email = email;
 		this.joinDate = joinDate;
-		//this.salary = new Salary();
+		this.salary = new ArrayList<SalaryUnit>();
 	}
-	
-	
 	
 	public Employee(ObjectId id, String firstName, String lastName, String address, String phone, String email,
 			Date joinDate) {
@@ -44,6 +44,19 @@ public class Employee {
 		this.phone = phone;
 		this.email = email;
 		this.joinDate = joinDate;
+	}
+	
+	public Employee(ObjectId id, String firstName, String lastName, String address, String phone, String email,
+			Date joinDate, List<SalaryUnit> salary) {
+		this.id = id;
+		this.webId = this.id.toHexString();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.phone = phone;
+		this.email = email;
+		this.joinDate = joinDate;
+		this.salary = salary;
 	}
 
 	public ObjectId getId() {
@@ -110,13 +123,13 @@ public class Employee {
 		this.joinDate = joinDate;
 	}
 
-	/*public Salary getSalary() {
+	public List<SalaryUnit> getSalary() {
 		return salary;
 	}
 
-	public void setSalary(Salary salary) {
+	public void setSalary(List<SalaryUnit> salary) {
 		this.salary = salary;
-	}*/
+	}
 	
 	
 

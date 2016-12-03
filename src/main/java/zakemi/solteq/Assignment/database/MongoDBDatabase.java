@@ -2,6 +2,7 @@ package zakemi.solteq.Assignment.database;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -10,12 +11,15 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
 import zakemi.solteq.Assignment.model.Employee;
+import zakemi.solteq.Assignment.model.SearchParams;
 
 public class MongoDBDatabase implements DatabaseConnection {
 	
@@ -113,6 +117,61 @@ public class MongoDBDatabase implements DatabaseConnection {
 		employeeCollection.find().forEach(addDoc);;
 		
 		return employees;
+	}
+	
+	@Override
+	public List<Employee> search(SearchParams params) {
+		List<Employee> result = new ArrayList<Employee>();
+		BasicDBObject query = new BasicDBObject();
+		if (params.getFirstName().length() > 0){
+			Document regex = new Document("$regex", Pattern.quote(params.getFirstName()));
+			regex.append("$options", "i");
+			query.append(EMPLOYEE_FIRSTNAME, regex);
+		}
+		if (params.getLastName().length() > 0){
+			Document regex = new Document("$regex", Pattern.quote(params.getLastName()));
+			regex.append("$options", "i");
+			query.append(EMPLOYEE_LASTNAME, regex);
+		}
+		if (params.getAddress().length() > 0){
+			Document regex = new Document("$regex", Pattern.quote(params.getAddress()));
+			regex.append("$options", "i");
+			query.append(EMPLOYEE_ADDRESS, regex);
+		}
+		if (params.getPhone().length() > 0){
+			Document regex = new Document("$regex", Pattern.quote(params.getPhone()));
+			regex.append("$options", "i");
+			query.append(EMPLOYEE_PHONE, regex);
+		}
+		if (params.getEmail().length() > 0){
+			Document regex = new Document("$regex", Pattern.quote(params.getEmail()));
+			regex.append("$options", "i");
+			query.append(EMPLOYEE_EMAIL, regex);
+		}
+		if (params.getJoinDateBegin() != null){
+			BasicDBObject dateQuery = new BasicDBObject("$gte", params.getJoinDateBegin());
+			query.append(EMPLOYEE_JOINDATE, dateQuery);
+		}
+		if (params.getJoinDateEnd() != null){
+			BasicDBObject dateQuery = new BasicDBObject("$lte", params.getJoinDateEnd());
+			query.append(EMPLOYEE_JOINDATE, dateQuery);
+		}
+		FindIterable<Document> cursor = employeeCollection.find(query);
+		MongoCursor<Document> cur = cursor.iterator();
+		while (cur.hasNext()){
+			Document employeeDoc = cur.next();
+			Employee employee = new Employee(
+					employeeDoc.getObjectId(EMPLOYEE_ID),
+					employeeDoc.getString(EMPLOYEE_FIRSTNAME),
+					employeeDoc.getString(EMPLOYEE_LASTNAME),
+					employeeDoc.getString(EMPLOYEE_ADDRESS),
+					employeeDoc.getString(EMPLOYEE_PHONE),
+					employeeDoc.getString(EMPLOYEE_EMAIL),
+					employeeDoc.getDate(EMPLOYEE_JOINDATE));
+			result.add(employee);
+		}
+		
+		return result;
 	}
 
 }

@@ -19,7 +19,56 @@
 	    <h3 class="panel-title">Search</h3>
 	  </div>
 	  <div class="panel-body">
-	    Panel content
+	  	<form novalidate class="form-horizontal">
+		    <div class="form-group">
+		    	<label for="firstNameSearch" class="control-label col-md-2">First name:</label>
+		    	<div class="col-md-4">
+		    		<input type="text" class="form-control" ng-model="searchParams.firstName" id="firstNameSearch">
+		    	</div>
+		    	<label for="lastNameSearch" class="control-label col-md-2">Last name:</label>
+		    	<div class="col-md-4">
+		    		<input type="text" class="form-control" ng-model="searchParams.lastName" id="lastNameSearch">
+		    	</div>
+		    </div>
+		    <div class="form-group">
+		    	<label for="joinDateBeginSearch" class="control-label col-md-2">Join date from:</label>
+		    	<div class="col-md-4">
+		    		<p class="input-group">
+			          <input type="text" id="joinDateBeginSearch" class="form-control" uib-datepicker-popup="{{format}}" ng-model="searchParams.joinDateBegin" is-open="popup.beginOpened" datepicker-options="beginDateOptions" close-text="Close" />
+			          <span class="input-group-btn">
+			            <button type="button" class="btn btn-default" ng-click="openBeginPicker()"><i class="glyphicon glyphicon-calendar"></i></button>
+			          </span>
+			        </p>
+		    	</div>
+		    	<label for="joinDateEndSearch" class="control-label col-md-2">Join date to:</label>
+		    	<div class="col-md-4">
+		    		<p class="input-group">
+			          <input type="text" id="joinDateEndSearch" class="form-control" uib-datepicker-popup="{{format}}" ng-model="searchParams.joinDateEnd" is-open="popup.endOpened" min-date="searchParams.joinDateBegin" close-text="Close" datepicker-options="endDateOptions" />
+			          <span class="input-group-btn">
+			            <button type="button" class="btn btn-default" ng-click="openEndPicker()"><i class="glyphicon glyphicon-calendar"></i></button>
+			          </span>
+			        </p>
+		    	</div>
+		    </div>
+		    <div class="form-group">
+		    	<label for="phoneSearch" class="control-label col-md-2">Phone:</label>
+		    	<div class="col-md-4">
+		    		<input type="text" id="phoneSearch" class="form-control" ng-model="searchParams.phone">
+		    	</div>
+		    	<label for="emailSearch" class="control-label col-md-2">Email:</label>
+		    	<div class="col-md-4">
+		    		<input type="text" id="emailSearch" class="form-control" ng-model="searchParams.email">
+		    	</div>
+		    </div>
+		    <div class="form-group">
+		    	<label for="addressSearch" class="control-label col-md-2">Address:</label>
+		    	<div class="col-md-10">
+		    		<input type="text" id="addressSearch" class="form-control" ng-model="searchParams.address">
+		    	</div>
+		    </div>
+	    	<button type="button" class="btn btn-default" ng-click="resetForm()">Reset</button>
+	    	<button type="submit" class="btn btn-primary" ng-click="search()">Search</button>
+	  	</form>
 	  </div>
 	</div>
 	<div class="panel panel-default">
@@ -67,31 +116,60 @@
 	
 	<script type="text/ng-template" id="employeeModal.html">
         <div class="modal-header">
-            <h3 class="modal-title" id="modal-title">I'm a modal!</h3>
+            <h3 class="modal-title" id="modal-title">Employee</h3>
         </div>
         <div class="modal-body" id="modal-body">
-            <div class="employee-details">
-				<label for="firstName">First name</label>
-				<input type="text" class="form-control" name="firstName" ng-model="employee.firstName">
-				<label for="lastName">Last name</label>
-				<input type="text" class="form-control" name="lastName" ng-model="employee.lastName">
-				<label for="joinDate">Join date</label>
-				<p class="input-group">
-                    <input type="text" class="form-control" name="joinDate" uib-datepicker-popup="yyyy/MM/dd" ng-model="employee.joinDate" is-open="datePopup.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="open()"><span class="glyphicon glyphicon-calendar"></span></button>
-                    </span>
-                </p>
+			<div class="row">
+                <div class="employee-details col-md-6">
+					<label for="firstName">First name</label>
+					<input type="text" class="form-control" name="firstName" ng-model="employee.firstName">
+					<label for="lastName">Last name</label>
+					<input type="text" class="form-control" name="lastName" ng-model="employee.lastName">
+					<label for="joinDate">Join date</label>
+					<p class="input-group">
+           	            <input type="text" class="form-control" name="joinDate" uib-datepicker-popup="yyyy/MM/dd" ng-model="employee.joinDate" is-open="datePopup.opened" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+           	            <span class="input-group-btn">
+                           <button type="button" class="btn btn-default" ng-click="open()"><span class="glyphicon glyphicon-calendar"></span></button>
+                        </span>
+   	                </p>
 				
-				<label for="phone">Phone</label>
-				<input type="text" class="form-control" name="phone" ng-model="employee.phone">
-				<label for="email">Email</label>
-				<input type="text" class="form-control" name="email" ng-model="employee.email">
-				<label for="address">Address</label>
-				<input type="text" class="form-control" name="address" ng-model="employee.address">
-			</div>
-			<div class="employee-salary">
-				Salary...
+					<label for="phone">Phone</label>
+					<input type="text" class="form-control" name="phone" ng-model="employee.phone">
+					<label for="email">Email</label>
+					<input type="text" class="form-control" name="email" ng-model="employee.email">
+					<label for="address">Address</label>
+					<input type="text" class="form-control" name="address" ng-model="employee.address">
+				</div>
+			
+	    		<div class="employee-salary col-md-6">
+					<div>Salary</div>
+					<div class="row">
+						<div class="col-md-5">Month</div>
+						<div class="col-md-5">Amount</div>
+						<div class="col-md-2">Delete</div>
+					</div>
+
+					<div ng-repeat="salaryUnit in employee.salary">
+						<div class="row" ng-hide="salaryUnit.deleted">
+							<div class="col-md-5">
+					        	<p class="input-group">
+        	   	                    <input type="text" class="form-control" name="date" uib-datepicker-popup="yyyy/MM" ng-model="salaryUnit.date" ng-required is-open="salaryUnit.pickerOpened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+           		                    <span class="input-group-btn">
+           	                            <button type="button" class="btn btn-default" ng-click="openSalaryDatePicker(salaryUnit)"><span class="glyphicon glyphicon-calendar"></span></button>
+               	                    </span>
+   	              	            </p>
+							</div>
+							<div class="col-md-5">
+								<input type="number" step="any" class="form-control" name="amount" ng-required ng-model="salaryUnit.amount">
+							</div>
+							<div class="col-md-2">
+								<button class="btn btn-default" ng-click="deleteUnit(salaryUnit, $index)">X</button>
+							</div>
+                    	</div>
+					</div>
+					<button class="btn btn-default" ng-click="addEmptyUnit()">+</button>
+					
+				</div>
 			</div>
         </div>
 		<div class="modal-footer">

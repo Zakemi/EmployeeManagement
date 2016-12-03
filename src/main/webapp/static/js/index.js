@@ -6,7 +6,8 @@ employeeManagementApp.service('EmployeeService', ['$http', function($http){
 			getAllEmployees: getAllEmployees,
 			updateEmployee: updateEmployee,
 			addEmployee: addEmployee,
-			deleteEmployee: deleteEmployee
+			deleteEmployee: deleteEmployee,
+			search: search
 	};
 	
 	return factory;
@@ -57,12 +58,25 @@ employeeManagementApp.service('EmployeeService', ['$http', function($http){
 		return $http.delete('/employee/' + employee.webId)
 			.then(
 				function(response){
-					console.log(response)
+					console.log(response);
 				},
 				function(errResponse){
 					console.log("Something bad occured while deleting employee");
 					console.log(errResponse);
 				}
+			);
+	}
+	
+	function search(searchParams){
+		return $http.post("/search/", searchParams)
+			.then(
+					function(response){
+						console.log("Response data: " + response.data);
+						return response.data;
+					},
+					function(errResponse){
+						console.log("Something bad occured while searching employees");
+					}
 			);
 	}
 }]);
@@ -73,6 +87,39 @@ employeeManagementApp.controller('EmployeeManagementController', ['$uibModal', '
 	$scope.employee = null;
 	$scope.dateFormat = "yyyy/MM/dd";
 	$scope.loader = false;
+	
+	$scope.searchParams = {
+			firstName: "",
+			lastName: "",
+			joinDateBegin: null,
+			joinDateEnd: null,
+			phone: "",
+			email: "",
+			address: ""
+	};
+	$scope.popup = {
+			beginOpened: false,
+			endOpened: false
+	};
+	$scope.openBeginPicker = function (){
+		$scope.popup.beginOpened = true;
+	};
+	
+	$scope.openEndPicker = function (){
+		$scope.popup.endOpened = true;
+	};
+	$scope.$watch('searchParams.joinDateBegin', function(newval){
+		console.log($scope.searchParams.joinDateBegin);
+		$scope.endDateOptions = {
+				minDate: $scope.searchParams.joinDateBegin
+		};
+	});
+	$scope.$watch('searchParams.joinDateEnd', function(newval){
+		console.log($scope.searchParams.joinDateEnd);
+		$scope.beginDateOptions = {
+				maxDate: $scope.searchParams.joinDateEnd
+		};
+	});
 	
 	getEmployees();
 	
@@ -151,24 +198,74 @@ employeeManagementApp.controller('EmployeeManagementController', ['$uibModal', '
 		    function () {
 		        console.log('Modal dismissed at: ' + new Date());
 		    });
+	};
+	
+	$scope.resetForm = function (){
+		$scope.searchParams = {
+				firstName: "",
+				lastName: "",
+				joinDateBegin: null,
+				joinDateEnd: null,
+				phone: "",
+				email: "",
+				address: ""
+		};
+	};
+	
+	$scope.search = function (){
+		EmployeeService.search($scope.searchParams)
+			.then(
+					function(employees){
+						console.log("Search done");
+						console.log(employees);
+						$scope.employees = employees;
+						$scope.employees.forEach(employee => employee.joinDate = new Date(employee.joinDate));
+					}
+			)
 	}
+	
 	
 }]);
 
 employeeManagementApp.controller('ModalInstanceCtrl', function ($uibModalInstance, $scope, EmployeeService, employee) {
   $scope.employee = employee;
+  $scope.employee.salary.forEach(salary => salary.date = new Date(salary.date));
   $scope.datePopup = {
     opened: false
   };
+  $scope.salaryDatePopup = {
+	opened: false
+  }
   
   $scope.dateOptions = {
+    datepickerMode: "month",
+    minMode: "month"
   };
   
   $scope.open = function() {
-	console.log("Try to open");
     $scope.datePopup.opened = true;
-    console.log($scope.datePopup.opened);
   };
+  
+  $scope.openSalaryDatePicker = function(salaryUnit){
+	  salaryUnit.pickerOpened = true;
+  }
+  
+  $scope.deleteUnit = function(salaryUnit, index){
+	  if (salaryUnit.id == null){
+		  $scope.employee.salary.splice(index, 1);
+	  }
+	  salaryUnit.deleted = true;
+  }
+  
+  $scope.addEmptyUnit = function(){
+	  $scope.employee.salary.push({
+		  "id": null, 
+		  "webId": null,
+		  "employeeId": employee.id,
+		  "date": null,
+	  	  "amount": null
+		  });
+  }
 
   $scope.save = function () {
     $uibModalInstance.close($scope.employee);
