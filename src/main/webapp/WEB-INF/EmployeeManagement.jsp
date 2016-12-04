@@ -4,7 +4,7 @@
 <html ng-app="employeeManagementApp">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>Insert title here</title>
+	<title>Employee management</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0-rc.2/angular.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
@@ -14,6 +14,10 @@
 	<link href="/static/css/index.css" rel="stylesheet">
 </head>
 <body ng-controller="EmployeeManagementController as ctrl" class="modal-demo">
+	<ul id="nav" class="nav nav-tabs">
+	  <li role="presentation" class="active"><a href="/">Employee management</a></li>
+	  <li role="presentation"><a href="/reports">Reports</a></li>
+	</ul>
 	<div class="panel panel-default">
 	  <div class="panel-heading">
 	    <h3 class="panel-title">Search</h3>

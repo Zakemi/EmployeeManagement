@@ -2,6 +2,10 @@ body {
 	padding: 1em;
 }
 
+#nav {
+	margin-bottom: 1em;
+}
+
 .employee-details {
 	width: 50%;
 }

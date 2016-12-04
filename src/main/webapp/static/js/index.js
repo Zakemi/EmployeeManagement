@@ -1,4 +1,4 @@
-var employeeManagementApp = angular.module('employeeManagementApp', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
+var employeeManagementApp = angular.module('employeeManagementApp', ['ngAnimate', 'ngSanitize', 'ui.bootstrap', 'chart.js']);
 
 employeeManagementApp.service('EmployeeService', ['$http', function($http){
 	
@@ -275,3 +275,80 @@ employeeManagementApp.controller('ModalInstanceCtrl', function ($uibModalInstanc
     $uibModalInstance.dismiss();
   };
 });
+
+employeeManagementApp.service('ReportsService', ["$http", function($http){
+	var factory = {
+		averageSalaryPerMonths: averageSalaryPerMonths
+	}
+	
+	return factory;
+	
+	function averageSalaryPerMonths(){
+		return $http.get("/reports/averageSalaryPerMonths/")
+			.then(
+				function(response){
+					console.log(response);
+					return response.data;
+				},
+				function(errResponse){
+					console.log("Something bad occured while getting averageSalaryPerMonths");
+					console.log(errResponse);
+					return {};
+				}
+			);
+	}
+}]);
+
+employeeManagementApp.controller("ReportsController", ["$scope", "$compile", function($scope, $compile){
+	
+	$scope.averageSalaryPerMonths = function(){
+		console.log("Avg method called");
+		var reportsElement = angular.element(document.getElementById("reports-ctrls"));
+		reportsElement.html('<div id="ctrl-body" ng-controller="averageSalaryPerMonthsController as ctrl"></div>');
+		$scope.activateView(reportsElement);
+	}
+	
+	$scope.activateView = function(ele) {
+	    $compile(ele.contents())($scope);
+	  };
+}]);
+
+employeeManagementApp.controller("averageSalaryPerMonthsController", ["$scope", "ReportsService", "$compile", function($scope, ReportsService, $compile){
+	
+	$scope.data = [];
+	$scope.xlabels = [];
+	$scope.ydata = [];
+	
+	ReportsService.averageSalaryPerMonths()
+		.then(
+				function(data){
+					$scope.data = data;
+					for (var i=0; i<$scope.data.length; i++){
+						$scope.xlabels.push($scope.data[i].year + " " + $scope.data[i].month);
+						$scope.ydata.push($scope.data[i].amount);
+					}
+					setChart();
+				}
+		);
+	
+	function setChart(){
+		var mainElement = angular.element(document.getElementById("ctrl-body"));
+		mainElement.html('<canvas id="lineChart" class="chart chart-line" chart-data="ydata" \
+chart-labels="xlabels" chart-series="series" chart-options="options" \
+chart-dataset-override="datasetOverride" chart-click="onClick" \
+</canvas> ');
+		$compile(mainElement.contents())($scope);
+	}
+	
+	$scope.options = {
+	    scales: {
+	      yAxes: [
+	        {
+	          id: 'avgsalary',
+	          type: 'linear',
+	          display: true
+	        }
+	      ]
+	    }
+	  };
+}]);

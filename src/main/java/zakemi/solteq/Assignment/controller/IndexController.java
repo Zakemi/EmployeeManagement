@@ -10,7 +10,6 @@ public class IndexController {
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public String getIndex(){
-		System.out.println("Get index jsp");
 		return "EmployeeManagement";
 	}
 

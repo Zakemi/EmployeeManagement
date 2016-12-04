@@ -16,6 +16,8 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
+import zakemi.solteq.Assignment.model.ReportsModels;
+import zakemi.solteq.Assignment.model.ReportsModels.MonthhySalary;
 import zakemi.solteq.Assignment.model.SalaryUnit;
 
 public class SalaryDatabaseImpl implements SalaryDatabase {
@@ -48,9 +50,12 @@ public class SalaryDatabaseImpl implements SalaryDatabase {
 		BasicDBObject match = new BasicDBObject(EMPLOYEE_ID, salaryUnit.getEmployeeId())
 				.append("year", salaryUnit.getDate().getYear())
 				.append("month", salaryUnit.getDate().getMonth());
+		System.out.println(project);
+		System.out.println(match);
 		Document result = salaryCollection.aggregate(Arrays.asList(
 				new BasicDBObject("$project", project), 
 				new BasicDBObject("$match", match))).first();
+		System.out.println(result);
 		// if we can't find document with the year and month, we can add it
 		if (result == null){
 			salaryCollection.insertOne(new Document(EMPLOYEE_ID, salaryUnit.getEmployeeId())
@@ -101,6 +106,29 @@ public class SalaryDatabaseImpl implements SalaryDatabase {
 					doc.getDouble(AMOUNT)));
 		}
 		
+		return result;
+	}
+
+	@Override
+	public List<MonthhySalary> getAvarageSalaryPerMonthCompany() {
+		List<MonthhySalary> result = new ArrayList<MonthhySalary>();
+		//db.salary.aggregate([{ $group: { _id: { year: {$year: "$date"}, month: {$month:"$date"} }, 
+		//                                 averageSalary: {$avg: "$amount"} }}])
+		BasicDBObject id = new BasicDBObject();
+		id.append("year", new BasicDBObject("$year", "$" + DATE));
+		id.append("month", new BasicDBObject("$month", "$" + DATE));
+		BasicDBObject avgSalary = new BasicDBObject("$avg", "$" + AMOUNT);
+		BasicDBObject group = new BasicDBObject();
+		group.append("_id", id);
+		group.append("avgSalary", avgSalary);
+		BasicDBObject sort = new BasicDBObject("_id.year", 1)
+				.append("_id.month", 1);
+		Iterable<Document> aggRes = salaryCollection.aggregate(Arrays.asList(new BasicDBObject("$group", group),
+																			 new BasicDBObject("$sort", sort)));
+		for (Document doc: aggRes){
+			Document doc_id = (Document) doc.get("_id");
+			result.add(new ReportsModels.MonthhySalary(doc_id.getInteger("year"), doc_id.getInteger("month"), doc.getDouble("avgSalary")));
+		}
 		return result;
 	}
 
