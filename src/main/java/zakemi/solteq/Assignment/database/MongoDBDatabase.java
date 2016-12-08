@@ -46,7 +46,7 @@ public class MongoDBDatabase implements DatabaseConnection {
 		employeeCollection = database.getCollection(EMPLOYEE_COLLECTION);
 	}
 
-	public void addEmployee(Employee employee) {
+	public ObjectId addEmployee(Employee employee) {
 		Document doc = new Document(EMPLOYEE_FIRSTNAME, employee.getFirstName())
 				.append(EMPLOYEE_LASTNAME, employee.getLastName())
 				.append(EMPLOYEE_ADDRESS, employee.getAddress())
@@ -54,6 +54,7 @@ public class MongoDBDatabase implements DatabaseConnection {
 				.append(EMPLOYEE_EMAIL, employee.getEmail())
 				.append(EMPLOYEE_JOINDATE, employee.getJoinDate());
 		employeeCollection.insertOne(doc);
+		return doc.getObjectId("_id");
 	}
 
 	public Employee getEmployeeById(ObjectId id) {

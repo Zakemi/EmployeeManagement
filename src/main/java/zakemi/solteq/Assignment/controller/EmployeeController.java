@@ -2,6 +2,7 @@ package zakemi.solteq.Assignment.controller;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,7 +59,13 @@ public class EmployeeController {
 	public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee){
 		if (employee == null)
 			return new ResponseEntity<Employee>(HttpStatus.NO_CONTENT);
-		database.addEmployee(employee);
+		ObjectId id = database.addEmployee(employee);
+		if (employee.getSalary().size() > 0){
+			for (SalaryUnit salary: employee.getSalary()){
+				salary.setEmployeeId(id);
+				salaryDatabase.addSalaryUnit(salary);
+			}
+		}
 		return new ResponseEntity<Employee>(HttpStatus.OK);
 	}
 	

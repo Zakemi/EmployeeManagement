@@ -9,7 +9,7 @@ import zakemi.solteq.Assignment.model.SearchParams;
 
 public interface DatabaseConnection {
 	
-	public void addEmployee(Employee employee);
+	public ObjectId addEmployee(Employee employee);
 	public Employee getEmployeeById(ObjectId id);
 	public void updateEmployeeById(Employee employee);
 	public void deleteEmployeeById(ObjectId id);
