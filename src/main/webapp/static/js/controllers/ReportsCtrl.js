@@ -7,7 +7,15 @@ angular.module('employeeManagementApp').controller("ReportsCtrl", ["$scope", "$c
 		$scope.activateView(reportsElement);
 	}
 	
+	$scope.trackSalaries = function() {
+		var reportsElement = angular.element(document.getElementById("reports-ctrls"));
+		reportsElement.html('<div id="ctrl-body" ng-controller="TrackSalariesCtrl as ctrl"></div>');
+		$scope.activateView(reportsElement);
+	}
+	
 	$scope.activateView = function(ele) {
 	    $compile(ele.contents())($scope);
 	  };
+	  
+	
 }]);

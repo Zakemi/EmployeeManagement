@@ -18,6 +18,7 @@
 	<script src="/static/js/app.js"></script>
 	<script src="/static/js/controllers/ReportsCtrl.js"></script>
 	<script src="/static/js/controllers/reports/AvgSalaryPerMonthsCtrl.js"></script>
+	<script src="/static/js/controllers/reports/TrackSalariesCtrl.js"></script>
 	<script src="/static/js/services/reportsService.js"></script>
 </head>
 <body ng-controller="ReportsCtrl">
@@ -29,7 +30,7 @@
 		<div class="col-md-3">
 			<div class="list-group">
 			    <a href="" class="list-group-item" ng-click="averageSalaryPerMonths()">Average salary per months</a>
-			    <a href="" class="list-group-item">Track of the salaries</a>
+			    <a href="" class="list-group-item" ng-click="trackSalaries()">Track of the salaries</a>
 			</div>
 		</div>
 		<div id="reports-ctrls" class="col-md-9">

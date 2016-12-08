@@ -98,7 +98,8 @@ public class SalaryDatabaseImpl implements SalaryDatabase {
 	public List<SalaryUnit> getSalaryByEmployeeId(ObjectId employeeId) {
 		List<SalaryUnit> result = new ArrayList<SalaryUnit>();
 		
-		Iterable<Document> salaries = salaryCollection.find(new BasicDBObject(EMPLOYEE_ID, employeeId));
+		Iterable<Document> salaries = salaryCollection.find(new BasicDBObject(EMPLOYEE_ID, employeeId))
+				.sort(new BasicDBObject(YEAR, 1).append(MONTH, 1));
 		
 		for (Document doc: salaries){
 			//LocalDate date = doc.getDate(DATE).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
