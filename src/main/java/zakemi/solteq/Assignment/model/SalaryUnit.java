@@ -1,7 +1,5 @@
 package zakemi.solteq.Assignment.model;
 
-import java.util.Date;
-
 import org.bson.types.ObjectId;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
@@ -11,17 +9,19 @@ public class SalaryUnit {
 	private ObjectId id;
 	private String webId;
 	private ObjectId employeeId;
-	private Date date;
+	private Integer year;
+	private Integer month;
 	private Double amount;
 	private boolean deleted;
 	
 	public SalaryUnit(){
 	}
 	
-	public SalaryUnit(ObjectId id, ObjectId employeeId, Date date, Double amount) {
+	public SalaryUnit(ObjectId id, ObjectId employeeId, Integer year, Integer month, Double amount) {
 		this.id = id;
 		this.employeeId = employeeId;
-		this.date = date;
+		this.year = year;
+		this.month = month;
 		this.amount = amount;
 		this.deleted = false;
 	}
@@ -50,12 +50,20 @@ public class SalaryUnit {
 		this.employeeId = employeeId;
 	}
 
-	public Date getDate() {
-		return date;
+	public Integer getYear() {
+		return year;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+
+	public Integer getMonth() {
+		return month;
+	}
+
+	public void setMonth(Integer month) {
+		this.month = month;
 	}
 
 	public Double getAmount() {

@@ -1,0 +1,1 @@
+angular.module('employeeManagementApp', ['ngAnimate', 'ngSanitize', 'ui.bootstrap', 'chart.js']);

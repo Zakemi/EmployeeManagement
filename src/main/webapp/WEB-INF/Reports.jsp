@@ -9,13 +9,18 @@
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.2.0.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-	<script src="http://cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.min.js"></script>
-    <script src="/static/js/index.js"></script>
 	<link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href="/static/css/index.css" rel="stylesheet">
+	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+	<script src="http://cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.min.js"></script>
+	
+	<script src="/static/js/app.js"></script>
+	<script src="/static/js/controllers/ReportsCtrl.js"></script>
+	<script src="/static/js/controllers/reports/AvgSalaryPerMonthsCtrl.js"></script>
+	<script src="/static/js/services/reportsService.js"></script>
 </head>
-<body ng-controller="ReportsController">
+<body ng-controller="ReportsCtrl">
 	<ul id="nav" class="nav nav-tabs">
 	    <li role="presentation"><a href="/">Employee management</a></li>
 	    <li role="presentation" class="active"><a href="/reports">Reports</a></li>
