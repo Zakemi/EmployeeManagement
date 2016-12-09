@@ -52,7 +52,6 @@ angular.module('employeeManagementApp').service('EmployeeService', ['$http', fun
 	}
 	
 	function deleteEmployee(employee){
-		console.log("/employee/" + employee.webId);
 		return $http.delete('/employee/' + employee.webId)
 			.then(
 				function(response){
@@ -74,6 +73,7 @@ angular.module('employeeManagementApp').service('EmployeeService', ['$http', fun
 					},
 					function(errResponse){
 						console.log("Something bad occured while searching employees");
+						return errResponse;
 					}
 			);
 	}

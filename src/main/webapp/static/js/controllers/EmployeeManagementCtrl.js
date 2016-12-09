@@ -1,4 +1,4 @@
-angular.module('employeeManagementApp').controller('EmployeeManagementCtrl', ['$uibModal', '$scope', 'EmployeeService', 'uibDateParser', function($uibModal, $scope, EmployeeService, uibDateParser){
+angular.module('employeeManagementApp').controller('EmployeeManagementCtrl', ['$uibModal', '$scope', 'EmployeeService', 'uibDateParser', '$q', function($uibModal, $scope, EmployeeService, uibDateParser, $q){
 	
 	$scope.employees = [];
 	$scope.employee = null;
@@ -12,7 +12,10 @@ angular.module('employeeManagementApp').controller('EmployeeManagementCtrl', ['$
 			joinDateEnd: null,
 			phone: "",
 			email: "",
-			address: ""
+			address: "",
+			sortDirection: 1,
+			sortSelected: "Name",
+			sortOptions: ["Name", "Join date", "Email", "Address"]
 	};
 	$scope.popup = {
 			beginOpened: false,
@@ -81,11 +84,8 @@ angular.module('employeeManagementApp').controller('EmployeeManagementCtrl', ['$
 			};
 		}
 		var modalInstance = $uibModal.open({
-		      ariaLabelledBy: 'modal-title',
-		      ariaDescribedBy: 'modal-body',
 		      templateUrl: 'employeeModal.html',
 		      controller: 'ModalInstanceCtrl',
-		      controllerAs: '$ctrl',
 		      size: "lg",
 		      resolve: {
 		        employee: function () {
@@ -115,7 +115,8 @@ angular.module('employeeManagementApp').controller('EmployeeManagementCtrl', ['$
 		    },
 		    function () {
 		        console.log('Modal dismissed at: ' + new Date());
-		    });
+		    }
+		);
 	};
 	
 	$scope.resetForm = function (){
@@ -131,16 +132,15 @@ angular.module('employeeManagementApp').controller('EmployeeManagementCtrl', ['$
 	};
 	
 	$scope.search = function (){
+			
 		EmployeeService.search($scope.searchParams)
 			.then(
-					function(employees){
-						console.log("Search done");
-						console.log(employees);
-						$scope.employees = employees;
-						$scope.employees.forEach(employee => employee.joinDate = new Date(employee.joinDate));
-					}
-			)
-	}
+				function(employees){
+					$scope.employees = employees;
+					$scope.employees.forEach(employee => employee.joinDate = new Date(employee.joinDate));
+				}
+			);
+	};
 	
 	
 }]);

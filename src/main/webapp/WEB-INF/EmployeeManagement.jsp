@@ -73,12 +73,23 @@
 		    </div>
 		    <div class="form-group">
 		    	<label for="addressSearch" class="control-label col-md-2">Address:</label>
-		    	<div class="col-md-10">
+		    	<div class="col-md-4">
 		    		<input type="text" id="addressSearch" class="form-control" ng-model="searchParams.address">
 		    	</div>
+		    	<label for="sort" class="control-label col-md-2">Sort by:</label>
+		    	<div class="col-md-4">
+		    		<select class="form-control" ng-model="searchParams.sortSelected" ng-options="o as o for o in searchParams.sortOptions"></select>
+			    	<button type="button" class="btn btn-primary" ng-model="searchParams.sortDirection" uib-btn-checkbox btn-checkbox-true="1" btn-checkbox-false="-1">
+				        {{ searchParams.sortDirection == 1 ? 'Ascendant' : 'Descendant' }}
+				    </button>
+		    	</div>
+		    </div>
+		    <div class="form-group">
+		    	
 		    </div>
 	    	<button type="button" class="btn btn-default" ng-click="resetForm()">Reset</button>
 	    	<button type="submit" class="btn btn-primary" ng-click="search()">Search</button>
+		    
 	  	</form>
 	  </div>
 	</div>

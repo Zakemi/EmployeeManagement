@@ -11,6 +11,8 @@ public class SearchParams {
 	private String email;
 	private Date joinDateBegin;
 	private Date joinDateEnd;
+	private Integer sortDirection;
+	private String sortSelected;
 	
 	public SearchParams(){}
 
@@ -68,6 +70,22 @@ public class SearchParams {
 
 	public void setJoinDateEnd(Date joinDateEnd) {
 		this.joinDateEnd = joinDateEnd;
+	}
+
+	public Integer getSortDirection() {
+		return sortDirection;
+	}
+
+	public void setSortDirection(Integer sortDirection) {
+		this.sortDirection = sortDirection;
+	}
+
+	public String getSortSelected() {
+		return sortSelected;
+	}
+
+	public void setSortSelected(String sortSelected) {
+		this.sortSelected = sortSelected;
 	}
 	
 	

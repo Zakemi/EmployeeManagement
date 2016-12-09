@@ -124,6 +124,7 @@ public class MongoDBDatabase implements DatabaseConnection {
 	public List<Employee> search(SearchParams params) {
 		List<Employee> result = new ArrayList<Employee>();
 		BasicDBObject query = new BasicDBObject();
+		BasicDBObject sort = new BasicDBObject();
 		if (params.getFirstName().length() > 0){
 			Document regex = new Document("$regex", Pattern.quote(params.getFirstName()));
 			regex.append("$options", "i");
@@ -157,7 +158,18 @@ public class MongoDBDatabase implements DatabaseConnection {
 			BasicDBObject dateQuery = new BasicDBObject("$lte", params.getJoinDateEnd());
 			query.append(EMPLOYEE_JOINDATE, dateQuery);
 		}
-		FindIterable<Document> cursor = employeeCollection.find(query);
+		System.out.println(params.getSortSelected());
+		if (params.getSortSelected().equals("Join date")){
+			sort.append(EMPLOYEE_JOINDATE, params.getSortDirection());
+		} else if (params.getSortSelected().equals("Email")){
+			sort.append(EMPLOYEE_EMAIL, params.getSortDirection());
+		} else if (params.getSortSelected().equals("Address")){
+			sort.append(EMPLOYEE_ADDRESS, params.getSortDirection());
+		} else {
+			sort.append(EMPLOYEE_FIRSTNAME, params.getSortDirection());
+			sort.append(EMPLOYEE_LASTNAME, params.getSortDirection());
+		}
+		FindIterable<Document> cursor = employeeCollection.find(query).sort(sort);
 		MongoCursor<Document> cur = cursor.iterator();
 		while (cur.hasNext()){
 			Document employeeDoc = cur.next();
